@@ -42,7 +42,7 @@ import {
   isWithinInterval,
   addWeeks,
 } from "date-fns"
-import { ChevronLeft, ChevronRight, Search, FilterList, Download, Upload } from "@mui/icons-material"
+import { ChevronLeft, ChevronRight, Search, FilterList } from "@mui/icons-material"
 
 const theme = createTheme({
   palette: {
@@ -249,43 +249,43 @@ export function TaskPlanner() {
     })
   }
 
-  const exportTasks = () => {
-    const dataStr = JSON.stringify(tasks, null, 2)
-    const dataBlob = new Blob([dataStr], { type: "application/json" })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `tasks-${format(new Date(), "yyyy-MM-dd")}.json`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
+  // const exportTasks = () => {
+  //   const dataStr = JSON.stringify(tasks, null, 2)
+  //   const dataBlob = new Blob([dataStr], { type: "application/json" })
+  //   const url = URL.createObjectURL(dataBlob)
+  //   const link = document.createElement("a")
+  //   link.href = url
+  //   link.download = `tasks-${format(new Date(), "yyyy-MM-dd")}.json`
+  //   link.click()
+  //   URL.revokeObjectURL(url)
+  // }
 
-  const importTasks = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  // const importTasks = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0]
+  //   if (!file) return
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const imported = JSON.parse(e.target?.result as string)
-        const validTasks = imported
-          .map((task: any) => ({
-            ...task,
-            startDate: new Date(task.startDate),
-            endDate: new Date(task.endDate),
-          }))
-          .filter((task: any) => task.id && task.name && task.startDate && task.endDate && task.category)
+  //   const reader = new FileReader()
+  //   reader.onload = (e) => {
+  //     try {
+  //       const imported = JSON.parse(e.target?.result as string)
+  //       const validTasks = imported
+  //         .map((task: any) => ({
+  //           ...task,
+  //           startDate: new Date(task.startDate),
+  //           endDate: new Date(task.endDate),
+  //         }))
+  //         .filter((task: any) => task.id && task.name && task.startDate && task.endDate && task.category)
 
-        setTasks((prev) => [...prev, ...validTasks])
-      } catch (error) {
-        console.error("Failed to import tasks:", error)
-        alert("Failed to import tasks. Please check the file format.")
-      }
-    }
-    reader.readAsText(file)
-    // clear the input so same file can be re-imported if needed
-    if (event.target) event.target.value = ""
-  }
+  //       setTasks((prev) => [...prev, ...validTasks])
+  //     } catch (error) {
+  //       console.error("Failed to import tasks:", error)
+  //       alert("Failed to import tasks. Please check the file format.")
+  //     }
+  //   }
+  //   reader.readAsText(file)
+  //   // clear the input so same file can be re-imported if needed
+  //   if (event.target) event.target.value = ""
+  // }
 
   const goToPreviousMonth = () => {
     setCurrentViewDate((prev) => subMonths(prev, 1))
@@ -319,15 +319,15 @@ export function TaskPlanner() {
     setDragOffset({ days: 0 })
   }, [dragMode, isDragging, dragStart, dragEnd, draggedTask, previewTask])
 
-  const isDateInSelection = useCallback(
-    (date: Date) => {
-      if (!dragStart || !dragEnd || dragMode !== "create") return false
-      const start = dragStart <= dragEnd ? dragStart : dragEnd
-      const end = dragStart <= dragEnd ? dragEnd : dragStart
-      return date >= start && date <= end
-    },
-    [dragStart, dragEnd, dragMode],
-  )
+  // const isDateInSelection = useCallback(
+  //   (date: Date) => {
+  //     if (!dragStart || !dragEnd || dragMode !== "create") return false
+  //     const start = dragStart <= dragEnd ? dragStart : dragEnd
+  //     const end = dragStart <= dragEnd ? dragEnd : dragStart
+  //     return date >= start && date <= end
+  //   },
+  //   [dragStart, dragEnd, dragMode],
+  // )
 
   const handleMouseDown = useCallback(
     (date: Date, e: React.MouseEvent) => {
@@ -803,7 +803,7 @@ export function TaskPlanner() {
             }}
           >
             {days.map((d, index) => {
-              const isSelected = isDateInSelection(d.fullDate)
+              // const isSelected = isDateInSelection(d.fullDate)
               const rowIndex = Math.floor(index / 7)
               const cellHeight = rowHeights[rowIndex] || 100
 
